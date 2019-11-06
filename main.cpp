@@ -8,20 +8,22 @@ using namespace std;
 
 int main() {
   tree t = tree();
-    
-  t.goUp();
-  t.goUp();
-  t.goUp();//not valid
-  t.goDown();
-  t.goDown();
-  t.goLeft();
-  t.goLeft();
-  t.goUp();
-  t.goRight();
-  t.goRight();
-  t.goRight();//not valid
+  // t.createBoard();
+  t.generalSearch(t.root, 2);
+  // t.goUp();
+  // t.goUp();
+  // t.goUp();//not valid
+  // t.goDown();
+  // t.goDown();
+  // t.goLeft();
+  // t.goLeft();
+  // t.goUp();
+  // t.goRight();
+  // t.goRight();
+  // t.goRight();//not valid
 
-  t.displayBoard();
+  // t.displayBoard();
+  //t.curr->display();
 
 return 0;
 }

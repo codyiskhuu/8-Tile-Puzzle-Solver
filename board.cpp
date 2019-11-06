@@ -2,6 +2,8 @@
 using namespace std;
 
 #include "board.h"
+#include <vector>
+#include <cmath>
 
 board::board(){
   // int pop = 1;
@@ -27,6 +29,7 @@ board::board(board* nb){
     }
     
   }
+  this->depth = nb->depth +1;
   this->row = nb->row;
   this->col = nb->col;
 }
@@ -86,7 +89,7 @@ void board :: moveUp(){
     cout <<"Can't Move Up" <<endl;
   }
   else{//swap current pos with row--
-    cout<<"Moved Up"<<endl;
+    // cout<<"Moved Up"<<endl;
     --row;
     int temp = this->arr[row][col];//take row 1 col 2
     arr[row][col] = 0;
@@ -94,7 +97,7 @@ void board :: moveUp(){
     
   }
   //up should now change it
-  display();
+  // display();
 
 }
 
@@ -103,14 +106,14 @@ void board :: moveDown(){
     cout <<"Can't Move Down" <<endl;
   }
   else{//swap current pos with row++
-    cout<< "Moved Down"<<endl;
+    // cout<< "Moved Down"<<endl;
     ++row;
     int temp = arr[row][col];//take row 1 col 2 
     arr[row][col] = 0;
     arr[row-1][col] = temp;
     
   }
-  display();
+  // display();
 
 }
 
@@ -119,14 +122,14 @@ void board :: moveLeft(){
     cout <<"Can't Move Left" <<endl;
   }
   else{//swap current pos with col--
-    cout<< "Moved Left"<<endl;
+    // cout<< "Moved Left"<<endl;
     --col;
     int temp = arr[row][col];//take row 2 col 1 
     arr[row][col] = 0;
     arr[row][col+1] = temp;
     
   }
-  display();
+  // display();
 
 }
 
@@ -135,30 +138,36 @@ void board :: moveRight(){
     cout <<"Can't Move Right" <<endl;
   }
   else{//swap current pos with col--
-    cout<< "Moved Right"<<endl;
+    // cout<< "Moved Right"<<endl;
     ++col;
     int temp = arr[row][col];//take row 2 col 1 
     arr[row][col] = 0;
     arr[row][col-1] = temp;
     
   }
-  display();
+  // display();
 
 }
 
-void board :: legalMoves(){
+vector<char> board :: legalMoves(){
+  vector<char> c;
   if(row != 0){//check up //if 0 then dont display 0
     cout << arr[row-1][col] <<endl;
+    c.push_back('w');
   }
   if(row != 2){//check down
     cout << arr[row+1][col] <<endl;
+    c.push_back('s');
   }
   if(col != 0){//check left
     cout << arr[row][col-1] <<endl;
+    c.push_back('a');
   }
   if(col != 2){//check right
     cout << arr[row][col+1] <<endl;
+    c.push_back('d');
   }
+  return c;
 }
 
 board board :: operator = (const board& b){
@@ -172,3 +181,50 @@ board board :: operator = (const board& b){
   this->col = b.col;
   return *this;
 }
+
+void board :: addScore(int h, int d){
+  int tempH = heuristics(h);
+  
+  this->score = tempH + d;//place hueristic function here
+  return;
+}
+int board:: heuristics(int h){
+  int count=0;
+  if(h==1){//
+    return 0;
+  }
+  else if(h==2){//misplaced tile
+    for(int i=0; i<3; ++i){
+      for(int j=0; j<3; ++j){
+        count = abs(arr[i][j] -goal[i][j]);
+      }
+    }
+  }
+  return count;
+}
+
+string board :: getHash(){
+  string hash;
+  
+  for(int i=0; i< 3; ++i){
+    for(int j=0; j<3; ++j){
+      hash += ('0' + this->arr[i][j]);
+    }
+  }
+
+  return hash;
+
+}
+string board :: getHashGoal(){
+  string hash;
+  
+  for(int i=0; i< 3; ++i){
+    for(int j=0; j<3; ++j){
+      hash += ('0' + this->goal[i][j]);
+    }
+  }
+
+  return hash;
+
+}
+
