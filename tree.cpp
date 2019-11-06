@@ -11,12 +11,7 @@ tree :: tree(){
   curr->prev = 0;
   
 }
-/*
-1)	Uniform Cost Search 
-2)	A* with the Misplaced Tile heuristic.
-3)	A* with the Manhattan Distance heuristic.
 
-*/
 void tree :: createBoard(){
   int userInput;  
   int counter = 1;
@@ -41,74 +36,74 @@ void tree :: createBoard(){
 }
 
 void tree :: goUp(){//current pos in tree
+  cout << "curr -> " << curr << endl;
  if(curr->validMove('w')) {
-    board* temp = new board(curr);//create new temp
-    board* tempParent = new board(curr);//for previous
-    temp->moveUp();//temp move up
-    curr->up = temp;//set current up to new moved temp
-    //now switch current to the one we just moved too    
-    curr = temp;
-    curr->prev = tempParent;
-    //prevNode = tempParent;
+    // Create child
+    board* child = new board(curr);
     
-    tempParent = NULL;
-    // delete tempParent; 
-    temp = NULL;//set to null then delete temp
-    // delete temp;
+    // Mutate child
+    child->moveUp();//temp move up
+    
+    // Add child node to parent's list of children
+    curr->up = child;
+    
+    // Set child's parent
+    child->prev = curr;
+
  } 
 }
 
 void tree :: goDown(){//current pos in tree
+  cout << "curr -> " << curr << endl;
+  curr->display();
   if(curr->validMove('s')) {
-    board* temp = new board(curr);//create new temp
-    board* tempParent = new board(curr);//for previous
+    // Create child
+    board* child = new board(curr);
     
-    temp->moveDown();//temp move down
-    curr->down=temp;//set current down to new moved temp
-    //now switch current to the one we just moved too
-
-    curr = temp;
-    curr->prev = tempParent;
-
-    tempParent = NULL;
-    // delete tempParent; 
-    temp = NULL;//set to null then delete temp
-    // delete temp; 
+    // Mutate child
+    child->moveDown();//temp move up
+    
+    // Add child node to parent's list of children
+    
+    curr->down = child;
+    
+    // Set child's parent
+    child->prev = curr;
   }
 }
 void tree :: goLeft(){//current pos in tree
+  cout << "curr -> " << curr << endl;
+  curr->display();
   if(curr->validMove('a')) {
-    board* temp = new board(curr);//create new temp
-    board* tempParent = new board(curr);//for previous
-    temp->moveLeft();//temp move left
-    curr->left=temp;//set current left to new moved temp
-    //now switch current to the one we just moved too
-
-    curr = temp;
-    curr->prev = tempParent;
-    // cout<<"flag"<<endl;
+    // Create child
+    board* child = new board(curr);
     
-    tempParent = NULL;
-    // delete tempParent; 
-    temp = NULL;//set to null then delete temp
-    // delete temp; 
+    // Mutate child
+    child->moveLeft();//temp move up
     
+    // Add child node to parent's list of children
+    curr->left = child;
+    
+    // Set child's parent
+    child->prev = curr;
   }
 }
 void tree :: goRight(){//current pos in tree
+  //   cout << "LINE 99\n";
+  // printf("%x\n", curr);
   if(curr->validMove('d')) {
-    board* temp = new board(curr);//create new temp
-    board* tempParent = new board(curr);//for previous
-    temp->moveRight();//temp move right
-    curr->right=temp;//set current right to new moved temp
-    //now switch current to the one we just moved too
-    curr = temp;
-    curr->prev = tempParent;
+    // Create child
+    board* child = new board(curr);
     
-    tempParent = NULL;
-    // delete tempParent; 
-    temp = NULL;//set to null then delete temp
-    // delete temp; 
+    // Mutate child
+    child->moveRight();//temp move up
+    
+    // Add child node to parent's list of children
+    curr->right = child;
+    
+    // Set child's parent
+    child->prev = curr;
+
   }
 }
 void tree :: displayBoard(){
@@ -143,8 +138,10 @@ void tree :: displayBoard(board* cur){
 b.push_back(curr);
 */
 bool tree:: expand(board* r, vector <board*> &b, int heuristic){
+  cout << "TEST"<<endl;
+  r->display();
   vector <char> c = r->legalMoves();//store all the legal moves
-
+  curr=r;
   for(int i =0 ; i<c.size();++i){//shows legal moves
     cout<<c.at(i)<<endl;
   }
@@ -164,7 +161,8 @@ bool tree:: expand(board* r, vector <board*> &b, int heuristic){
   for(int i=0; i<c.size(); ++i){//goes through all actions
     
     if(c.at(i)=='w'){//check up
-      
+      cout<<"EXAPND UP" <<endl;
+      curr->display();
       board* temp = new board(r);//set temp val of current node
       temp->moveUp();//do the action of moving up
       string sTemp = temp->getHash();//get the hash of the node
@@ -180,8 +178,9 @@ bool tree:: expand(board* r, vector <board*> &b, int heuristic){
         cout<<"up SUCC"<<endl;
         this->goUp();//do moving action
         curr->addScore(heuristic, curr->depth);
-        b.push_back(curr);//push it back into problems
-        curr = curr->prev;
+        b.push_back(curr->up);//push it back into problems
+        cout << "TEST" << curr << endl;
+        // curr = curr->prev;
         cout<<"Mapping this Hash: " <<sTemp<<endl;
         blacklist->insert(pair<string,bool>(sTemp,true));
       
@@ -204,11 +203,11 @@ bool tree:: expand(board* r, vector <board*> &b, int heuristic){
       }
       if(blacklist->find(sTemp) == blacklist->end()){
         cout<<"down SUCC"<<endl;
-        this->goDown();
+        this->goDown();//////////////////////////////
         curr->addScore(heuristic, curr->depth);
-        b.push_back(curr);
+        b.push_back(curr->down);
         
-        curr = curr->prev;
+        // curr = curr->prev;
         cout<<"Mapping this Hash: " <<sTemp<<endl;
         blacklist->insert(pair<string,bool>(sTemp,true));
         if(blacklist->find(sTemp) != blacklist->end()){
@@ -227,17 +226,18 @@ bool tree:: expand(board* r, vector <board*> &b, int heuristic){
         return true;
       }
       if(blacklist->find(sTemp) == blacklist->end()){
-        // cout<<"whattt"<<endl;
+        
         cout<<"left SUCC"<<endl;
         this->goLeft();
+        cout << "229\n";
         curr->addScore(heuristic, curr->depth);
-        // curr->display();
-        cout<<b.size()<<endl;
-        // cout<<"whattt"<<endl;
         
-        b.push_back(curr);//this line of code is messed up
+        cout << b.size() << endl;
         
-        curr = curr->prev;
+        
+        b.push_back(curr->left);//this line of code is messed up
+        
+        // curr = curr->prev;
         cout<<"Mapping this Hash: " <<sTemp<<endl;
         blacklist->insert(pair<string,bool>(sTemp,true));
         if(blacklist->find(sTemp) != blacklist->end()){
@@ -262,9 +262,11 @@ bool tree:: expand(board* r, vector <board*> &b, int heuristic){
       if(blacklist->find(sTemp) == blacklist->end()){
         cout<<"right SUCC"<<endl;
         this->goRight();
+        cout << "TEST\n";
         curr->addScore(heuristic, curr->depth);
-        b.push_back(curr);
-        curr = curr->prev;
+
+        b.push_back(curr->right);
+        // curr = currc->prev;
         cout<<"Mapping this Hash: " <<sTemp<<endl;
         blacklist->insert(pair<string,bool>(sTemp,true));
         if(blacklist->find(sTemp) != blacklist->end()){
@@ -287,7 +289,7 @@ bool tree:: expand(board* r, vector <board*> &b, int heuristic){
 function general-search(problem, QUEUEING-FUNCTION)  
 nodes = MAKE-QUEUE(MAKE-NODE(problem.INITIAL-STATE)) 
 loop do
- if EMPTY(nodes) then return "failure" 
+ if EMPTY(nodes) then eturn "failure" 
    node = REMOVE-FRONT(nodes) 
  if problem.GOAL-TEST(node.STATE) succeeds then return node
     nodes = QUEUEING-FUNCTION(nodes, EXPAND(node, problem.OPERATORS))  

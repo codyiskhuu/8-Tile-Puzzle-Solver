@@ -95,7 +95,8 @@ class tree{
       if(blacklist->find(lowHash) != blacklist->end()){
         cout<<endl<<endl <<"Black List is accepted"<<endl<<endl;
       }
-
+      cout<<"LOWEST NODE"<<endl;
+      lowestNode->display();
       if(expand(lowestNode, problems, heuristic)){// I EXPAND HERE// if a move is on the map, do not store it
         cout<<"done"<<endl;
         return;

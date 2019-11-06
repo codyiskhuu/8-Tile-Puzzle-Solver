@@ -9,7 +9,7 @@ using namespace std;
 int main() {
   tree t = tree();
   // t.createBoard();
-  t.generalSearch(t.root, 2);
+  t.generalSearch(t.root, 1);
   // t.goUp();
   // t.goUp();
   // t.goUp();//not valid

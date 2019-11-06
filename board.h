@@ -8,15 +8,15 @@ class board{
   friend class tree;
   private:
     //int arr[3][3];//holds the board
-    int arr[3][3] = {1, 2, 3,
-                     0, 5, 6, 
+    int arr[3][3] = {1, 3, 0,
+                     5, 2, 6, 
                      4, 7, 8};
     int goal[3][3] = {1, 2, 3, 4, 5, 6, 7, 8, 0};//goal state
     bool validMove(char c);//return true if its within the board// when c = 'w' (checks up) | c = 's' (checks down) | c = 'a' (checks left) | c = 'd' (checks right)
     // int row = 1;//encapsulates 0-2
     // int col = 1;//encapsulates 0-2
-    int row=1;
-    int col=0;
+    int row=0;
+    int col=2;
     int depth = 0;
     int score;
     board operator= (const board& b);

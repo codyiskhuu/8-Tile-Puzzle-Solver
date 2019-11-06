@@ -23,6 +23,7 @@ board::board(){
 //cout << row << " " <<col <<endl;
 }
 board::board(board* nb){
+
   for(int i = 0 ; i < 3; ++i){
     for(int j = 0; j < 3; ++j){
       this->arr[i][j] = nb->arr[i][j];
@@ -30,6 +31,7 @@ board::board(board* nb){
     
   }
   this->depth = nb->depth +1;
+  // this->score = nb->score;
   this->row = nb->row;
   this->col = nb->col;
 }
@@ -184,7 +186,7 @@ board board :: operator = (const board& b){
 
 void board :: addScore(int h, int d){
   int tempH = heuristics(h);
-  
+  cout<<"heuristic: "<<tempH<<endl;
   this->score = tempH + d;//place hueristic function here
   return;
 }
@@ -196,9 +198,14 @@ int board:: heuristics(int h){
   else if(h==2){//misplaced tile
     for(int i=0; i<3; ++i){
       for(int j=0; j<3; ++j){
-        count = abs(arr[i][j] -goal[i][j]);
+        if((arr[i][j] != goal[i][j])){
+          ++count;
+        }
       }
     }
+  }
+  else if(h==3){
+    
   }
   return count;
 }
