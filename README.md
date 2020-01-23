@@ -6,7 +6,9 @@ If the puzzle is impossible:
 e.g physically swapping two tiles so that it will appear as
 
 1 2 3
+
 4 5 6
+
 8 7 *
 
 Then the solver will do every possible move and tell the user that the puzzle is unsolvable
