@@ -136,18 +136,16 @@ void board :: moveLeft(){
 }
 
 void board :: moveRight(){
-  if(!validMove('d')){//return true do stuff else dont
+  if(!validMove('d')){//if the there isn't a valid move then exit
     cout <<"Can't Move Right" <<endl;
   }
-  else{//swap current pos with col--
-    // cout<< "Moved Right"<<endl;
+  else{
     ++col;
-    int temp = arr[row][col];//take row 2 col 1 
+    int temp = arr[row][col];
     arr[row][col] = 0;
     arr[row][col-1] = temp;
     
   }
-  // display();
 
 }
 
